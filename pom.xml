@@ -19,6 +19,7 @@
     </properties>
     <modules>
         <module>spring-batch-section4</module>
+        <module>spring-batch-section5</module>
     </modules>
     <dependencies>
         <dependency>
