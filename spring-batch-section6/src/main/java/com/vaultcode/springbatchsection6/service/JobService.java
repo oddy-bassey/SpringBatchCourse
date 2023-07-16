@@ -1,5 +1,6 @@
 package com.vaultcode.springbatchsection6.service;
 
+import com.vaultcode.springbatchsection6.dto.JobParamsRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
@@ -12,6 +13,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -30,10 +32,13 @@ public class JobService {
     private Job secondJob;
 
     @Async
-    public void startJob (String jobName) {
+    public void startJob (String jobName, List<JobParamsRequest> body) {
         try {
             Map<String, JobParameter<?>> params = new HashMap<>();
             params.put("currentTime", new JobParameter<>(System.currentTimeMillis(), Long.class));
+            body.forEach(jobParamsRequest -> params.put(jobParamsRequest.getParamKey(),
+                    new JobParameter<>(jobParamsRequest.getParamValue(), String.class)));
+
             JobParameters jobParameters = new JobParameters(params);
             JobExecution jobExecution = null;
 
