@@ -4,7 +4,7 @@ import com.vaultcode.springbatchsection5.listener.JobListener;
 import com.vaultcode.springbatchsection5.listener.StepListener;
 import com.vaultcode.springbatchsection5.processor.DataItemProcessor;
 import com.vaultcode.springbatchsection5.reader.DataItemReader;
-import com.vaultcode.springbatchsection5.service.SecondTasklet;
+import com.vaultcode.springbatchsection5.service.FirstTasklet;
 import com.vaultcode.springbatchsection5.writer.DataItemWriter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 @Configuration
 public class SampleJob {
 
-    private final SecondTasklet secondTasklet;
+    private final FirstTasklet firstTasklet;
     private final JobListener jobListener;
     private final StepListener stepListener;
 
@@ -37,16 +37,23 @@ public class SampleJob {
                 .incrementer(new RunIdIncrementer())
                 //.listener(jobListener)
                 .start(firstChunkStep(jobRepository, platformTransactionManager))
+                .next(firstTaskletStep(jobRepository, platformTransactionManager))
                 .build();
     }
 
     private  Step firstChunkStep(JobRepository jobRepository, PlatformTransactionManager platformTransactionManager) {
          return new StepBuilder("First Chunk Step", jobRepository)
-                 .<Integer, Integer>chunk(3, platformTransactionManager)
+                 .<Integer, Integer>chunk(4, platformTransactionManager)
                  .reader(itemReader)
                  //.processor(itemProcessor)
                  .writer(itemWriter)
                  //.listener(stepListener)
                  .build();
+    }
+
+    private  Step firstTaskletStep(JobRepository jobRepository, PlatformTransactionManager platformTransactionManager) {
+        return new StepBuilder("Second Step (tasklet)", jobRepository)
+                .tasklet(firstTasklet, platformTransactionManager)
+                .build();
     }
 }
