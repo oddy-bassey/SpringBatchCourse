@@ -1,5 +1,6 @@
 package com.vaultcode.springbatchsection4.config;
 
+import com.vaultcode.springbatchsection4.listener.JobListener;
 import com.vaultcode.springbatchsection4.service.SecondTasklet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,10 +24,13 @@ import org.springframework.transaction.PlatformTransactionManager;
 public class SampleJob {
 
     private final SecondTasklet secondTasklet;
+    private final JobListener jobListener;
+
     @Bean
     public Job firstJob(JobRepository jobRepository, PlatformTransactionManager platformTransactionManager) {
         return new JobBuilder("First Job", jobRepository)
                 .incrementer(new RunIdIncrementer())
+                .listener(jobListener)
                 .start(firstStep(jobRepository, platformTransactionManager))
                 .next(secondStep(jobRepository, platformTransactionManager))
                 .build();
