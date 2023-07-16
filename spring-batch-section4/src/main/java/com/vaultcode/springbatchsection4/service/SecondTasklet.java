@@ -13,9 +13,6 @@ public class SecondTasklet implements Tasklet {
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
         log.info("********This is the second Tasklet step!!*******");
-        log.info("** Step: '{}' execution context: '{}'",
-                chunkContext.getStepContext().getStepName(),
-                chunkContext.getStepContext().getStepExecution());
         return RepeatStatus.FINISHED;
     }
 }

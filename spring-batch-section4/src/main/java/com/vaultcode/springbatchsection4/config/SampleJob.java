@@ -1,6 +1,7 @@
 package com.vaultcode.springbatchsection4.config;
 
 import com.vaultcode.springbatchsection4.listener.JobListener;
+import com.vaultcode.springbatchsection4.listener.StepListener;
 import com.vaultcode.springbatchsection4.service.SecondTasklet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,7 @@ public class SampleJob {
 
     private final SecondTasklet secondTasklet;
     private final JobListener jobListener;
+    private final StepListener stepListener;
 
     @Bean
     public Job firstJob(JobRepository jobRepository, PlatformTransactionManager platformTransactionManager) {
@@ -55,6 +57,7 @@ public class SampleJob {
     private  Step secondStep(JobRepository jobRepository, PlatformTransactionManager platformTransactionManager) {
          return new StepBuilder("Second Step", jobRepository)
                  .tasklet(secondTasklet, platformTransactionManager)
+                 .listener(stepListener)
                  .build();
     }
 }
