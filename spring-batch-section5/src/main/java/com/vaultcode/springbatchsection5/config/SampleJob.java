@@ -42,9 +42,9 @@ public class SampleJob {
 
     private  Step firstChunkStep(JobRepository jobRepository, PlatformTransactionManager platformTransactionManager) {
          return new StepBuilder("First Chunk Step", jobRepository)
-                 .<Integer, Long>chunk(3, platformTransactionManager)
+                 .<Integer, Integer>chunk(3, platformTransactionManager)
                  .reader(itemReader)
-                 .processor(itemProcessor)
+                 //.processor(itemProcessor)
                  .writer(itemWriter)
                  //.listener(stepListener)
                  .build();

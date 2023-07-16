@@ -7,9 +7,9 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class DataItemWriter implements ItemWriter<Long> {
+public class DataItemWriter implements ItemWriter<Integer> {
     @Override
-    public void write(Chunk<? extends Long> chunk) throws Exception {
+    public void write(Chunk<? extends Integer> chunk) throws Exception {
         log.info("*** Inside item writer!");
         chunk.getItems().forEach(data -> log.info(String.valueOf(data)));
     }
